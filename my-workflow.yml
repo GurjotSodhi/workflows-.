@@ -1,0 +1,15 @@
+name: My Workflow # Give your workflow a name
+on:               # Define the trigger for the workflow
+  push:           # Example: trigger on push events
+    branches:
+      - main      # Run the workflow only when pushing to the 'main' branch
+
+jobs:             # Define the jobs the workflow will run
+  build:          # Example job name
+    runs-on: ubuntu-latest   # Specify the environment for the job
+    steps:                    # Define the steps within the job
+      - name: Checkout code   # A step to checkout the repository
+        uses: actions/checkout@v2
+
+      - name: Run a script    # A step to run a custom script
+        run: echo "Hello, world!"
