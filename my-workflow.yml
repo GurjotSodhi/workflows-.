@@ -1,15 +1,23 @@
-name: My Workflow # Give your workflow a name
-on:               # Define the trigger for the workflow
-  push:           # Example: trigger on push events
+on:
+  push:
     branches:
-      - main      # Run the workflow only when pushing to the 'main' branch
+      - main
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - uses: aws-actions/setup-sam@v1
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ##region##
+      # sam build 
+      - run: sam build --use-container
 
-jobs:             # Define the jobs the workflow will run
-  build:          # Example job name
-    runs-on: ubuntu-latest   # Specify the environment for the job
-    steps:                    # Define the steps within the job
-      - name: Checkout code   # A step to checkout the repository
-        uses: actions/checkout@v2
+# Run Unit tests- Specify unit tests here 
 
-      - name: Run a script    # A step to run a custom script
-        run: echo "Hello, world!"
+# sam deploy
+      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name sam-hello-world --s3-bucket ##s3-bucket## --capabilities CAPABILITY_IAM --region ##region## 
